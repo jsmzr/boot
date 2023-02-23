@@ -1,0 +1,4 @@
+test:
+  int: 2233
+  str: foo
+  bool: false
