@@ -31,7 +31,7 @@ func TestInitDefaultConfig(t *testing.T) {
 }
 
 func TestInitDefault(t *testing.T) {
-	initConfig()
+	_ = initConfig()
 	if viper.GetString(configPrefix+"file") != defaultConfig["file"] {
 		t.Fail()
 	}

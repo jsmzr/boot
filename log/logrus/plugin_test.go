@@ -52,42 +52,42 @@ func TestLoad(t *testing.T) {
 	keyLevel := "level"
 	// debug
 	viper.Set(configPrefix+keyLevel, "debug")
-	logPlugin.Load()
+	_ = logPlugin.Load()
 	if logrus.DebugLevel != logrus.GetLevel() {
 		t.Fail()
 	}
 
 	viper.Set(configPrefix+keyLevel, "DEBUG")
-	logPlugin.Load()
+	_ = logPlugin.Load()
 	if logrus.DebugLevel != logrus.GetLevel() {
 		t.Fail()
 	}
 
 	viper.Set(configPrefix+keyLevel, "WARN")
-	logPlugin.Load()
+	_ = logPlugin.Load()
 	if logrus.WarnLevel != logrus.GetLevel() {
 		t.Fail()
 	}
 
 	viper.Set(configPrefix+keyLevel, "ERROR")
-	logPlugin.Load()
+	_ = logPlugin.Load()
 	if logrus.ErrorLevel != logrus.GetLevel() {
 		t.Fail()
 	}
 
 	viper.Set(configPrefix+keyLevel, "unknow")
-	logPlugin.Load()
+	_ = logPlugin.Load()
 	if logrus.InfoLevel != logrus.GetLevel() {
 		t.Fail()
 	}
 
 	viper.Set(configPrefix+keyLevel, "INFO")
-	logPlugin.Load()
+	_ = logPlugin.Load()
 	if logrus.InfoLevel != logrus.GetLevel() {
 		t.Fail()
 	}
 	// test failed format
 	viper.Set(configPrefix+"format", "abc")
-	logPlugin.Load()
+	_ = logPlugin.Load()
 	viper.Set(configPrefix+"format", nil)
 }
