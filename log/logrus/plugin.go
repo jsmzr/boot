@@ -3,6 +3,7 @@ package logrus
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/jsmzr/boot"
 	"github.com/sirupsen/logrus"
@@ -14,10 +15,12 @@ type LogrusPlugin struct{}
 const configPrefix = "boot.logging."
 
 var defaultConfig map[string]interface{} = map[string]interface{}{
-	"enabled":      true,
-	"order":        -5,
-	"level":        "INFO",
-	"reportCaller": false,
+	"enabled":                true,
+	"order":                  -5,
+	"level":                  "INFO",
+	"reportCaller":           false,
+	"format.timestampFormat": time.RFC3339,
+	"format.fullTimestamp":   true,
 }
 
 func (l *LogrusPlugin) Enabled() bool {
@@ -27,6 +30,7 @@ func (l *LogrusPlugin) Order() int {
 	return viper.GetInt(configPrefix + "order")
 }
 func (l *LogrusPlugin) Load() error {
+	time.Now()
 	level := viper.GetString(configPrefix + "level")
 	boot.Log(fmt.Sprintf("logrus level is [%s]", level))
 	switch strings.ToUpper(level) {
