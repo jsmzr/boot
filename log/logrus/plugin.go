@@ -2,7 +2,6 @@ package logrus
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/jsmzr/boot"
@@ -33,15 +32,10 @@ func (l *LogrusPlugin) Load() error {
 	time.Now()
 	level := viper.GetString(configPrefix + "level")
 	boot.Log(fmt.Sprintf("logrus level is [%s]", level))
-	switch strings.ToUpper(level) {
-	case "DEBUG":
-		logrus.SetLevel(logrus.DebugLevel)
-	case "WARN":
-		logrus.SetLevel(logrus.WarnLevel)
-	case "ERROR":
-		logrus.SetLevel(logrus.ErrorLevel)
-	default:
-		logrus.SetLevel(logrus.InfoLevel)
+	if logLevel, err := logrus.ParseLevel(level); err != nil {
+		return err
+	} else {
+		logrus.SetLevel(logLevel)
 	}
 	var format logrus.TextFormatter
 	if err := viper.UnmarshalKey(configPrefix+"format", &format); err == nil {

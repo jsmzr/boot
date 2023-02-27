@@ -76,8 +76,7 @@ func TestLoad(t *testing.T) {
 	}
 
 	viper.Set(configPrefix+keyLevel, "unknow")
-	_ = logPlugin.Load()
-	if logrus.InfoLevel != logrus.GetLevel() {
+	if logPlugin.Load() == nil {
 		t.Fail()
 	}
 
