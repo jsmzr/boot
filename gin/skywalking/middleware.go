@@ -4,6 +4,7 @@ import (
 	"github.com/SkyAPM/go2sky"
 	v3 "github.com/SkyAPM/go2sky-plugins/gin/v3"
 	"github.com/gin-gonic/gin"
+	bootGin "github.com/jsmzr/boot/gin"
 	"github.com/jsmzr/boot/tracer"
 )
 
@@ -21,4 +22,8 @@ func (g *GinSkywalkingMiddle) Load(e *gin.Engine) error {
 
 func (g *GinSkywalkingMiddle) Order() int {
 	return 10
+}
+
+func init() {
+	bootGin.RegisterMiddleware("skywalking", &GinSkywalkingMiddle{})
 }
