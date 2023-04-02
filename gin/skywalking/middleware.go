@@ -4,11 +4,20 @@ import (
 	"github.com/SkyAPM/go2sky"
 	v3 "github.com/SkyAPM/go2sky-plugins/gin/v3"
 	"github.com/gin-gonic/gin"
+	"github.com/jsmzr/boot"
 	bootGin "github.com/jsmzr/boot/gin"
 	"github.com/jsmzr/boot/tracer"
+	"github.com/spf13/viper"
 )
 
 type GinSkywalkingMiddle struct{}
+
+const configPrefix = "boot.gin.middleware.skywalking."
+
+var defaultConfig = map[string]interface{}{
+	"enabled": true,
+	"order":   10,
+}
 
 func (g *GinSkywalkingMiddle) Load(e *gin.Engine) error {
 	e.Use(v3.Middleware(e, go2sky.GetGlobalTracer()))
@@ -21,9 +30,14 @@ func (g *GinSkywalkingMiddle) Load(e *gin.Engine) error {
 }
 
 func (g *GinSkywalkingMiddle) Order() int {
-	return 10
+	return viper.GetInt(configPrefix + "order")
+}
+
+func (g *GinSkywalkingMiddle) Enabled() bool {
+	return viper.GetBool(configPrefix + "enabled")
 }
 
 func init() {
+	boot.InitDefaultConfig(configPrefix, defaultConfig)
 	bootGin.RegisterMiddleware("skywalking", &GinSkywalkingMiddle{})
 }
