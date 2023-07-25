@@ -13,6 +13,7 @@ import (
 type GinMiddleware interface {
 	Load(*gin.Engine) error
 	Order() int
+	Enabled() bool
 }
 
 const configPrefix = "boot.gin."
