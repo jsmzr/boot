@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-type GinSkywalkingMiddle struct{}
+type SkywalkingMiddleware struct{}
 
 const configPrefix = "boot.gin.middleware.skywalking."
 
@@ -19,7 +19,7 @@ var defaultConfig = map[string]interface{}{
 	"order":   10,
 }
 
-func (g *GinSkywalkingMiddle) Load(e *gin.Engine) error {
+func (g *SkywalkingMiddleware) Load(e *gin.Engine) error {
 	e.Use(v3.Middleware(e, go2sky.GetGlobalTracer()))
 	e.Use(func(ctx *gin.Context) {
 		tracer.ThreadLocal.Set(ctx.Request)
@@ -29,15 +29,15 @@ func (g *GinSkywalkingMiddle) Load(e *gin.Engine) error {
 	return nil
 }
 
-func (g *GinSkywalkingMiddle) Order() int {
+func (g *SkywalkingMiddleware) Order() int {
 	return viper.GetInt(configPrefix + "order")
 }
 
-func (g *GinSkywalkingMiddle) Enabled() bool {
+func (g *SkywalkingMiddleware) Enabled() bool {
 	return viper.GetBool(configPrefix + "enabled")
 }
 
 func init() {
 	boot.InitDefaultConfig(configPrefix, defaultConfig)
-	bootGin.RegisterMiddleware("skywalking", &GinSkywalkingMiddle{})
+	bootGin.RegisterMiddleware("skywalking", &SkywalkingMiddleware{})
 }
