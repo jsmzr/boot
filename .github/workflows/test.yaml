@@ -28,7 +28,7 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.53
-          args: --verbose
+          args: --verbose --timeout=5m
   test:
     needs: lint
     strategy:
