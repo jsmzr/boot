@@ -29,7 +29,6 @@ func (l *LogrusPlugin) Order() int {
 	return viper.GetInt(configPrefix + "order")
 }
 func (l *LogrusPlugin) Load() error {
-	time.Now()
 	level := viper.GetString(configPrefix + "level")
 	boot.Log(fmt.Sprintf("logrus level is [%s]", level))
 	if logLevel, err := logrus.ParseLevel(level); err != nil {

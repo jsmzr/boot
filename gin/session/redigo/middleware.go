@@ -27,7 +27,9 @@ func (r *RedisMiddleware) Load(e *gin.Engine) error {
 	common.SetStoreOptions(store)
 	keyPrefix := viper.GetString(configPrefix + "keyPrefix")
 	if keyPrefix != "" {
-		redis.SetKeyPrefix(store, keyPrefix)
+		if err := redis.SetKeyPrefix(store, keyPrefix); err != nil {
+			return err
+		}
 	}
 	e.Use(sessions.Sessions(viper.GetString(configPrefix+"name"), store))
 	return nil

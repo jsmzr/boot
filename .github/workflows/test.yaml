@@ -17,17 +17,18 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup go
-        uses: actions/setup-go@v3
-        with:
-          go-version: '^1.17'
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Setup go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '^1.17'
+          cache: false
       - name: Setup golangci-lint
         uses: golangci/golangci-lint-action@v3.4.0
         with:
-          version: v1.48.0
-          args: --verbose
+          version: v1.52.2
+          args: --verbose --timeout=5m
   test:
     needs: lint
     strategy:
@@ -44,14 +45,14 @@ jobs:
       TESTTAGS: ${{ matrix.test-tags }}
       GOPROXY: https://proxy.golang.org
     steps:
-      - name: Set up Go ${{ matrix.go }}
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ matrix.go }}
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+      - name: Set up Go ${{ matrix.go }}
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go }}
       - uses: actions/cache@v3
         with:
           path: |
