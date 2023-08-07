@@ -16,6 +16,8 @@ var defaultConfig = map[string]interface{}{
 	"httpOnly": false,
 	// 1 ~ 4, see http/cookie.go
 	"sameSite": 1,
+	"enabled":  true,
+	"order":    13,
 }
 
 func SetStoreOptions(store sessions.Store) {

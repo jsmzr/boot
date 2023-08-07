@@ -14,7 +14,7 @@ import (
 
 type RedisMiddleware struct{}
 
-const configPrefix = "boot.gin.session"
+const configPrefix = "boot.gin.session."
 
 func (r *RedisMiddleware) Load(e *gin.Engine) error {
 	if bp.Instance == nil {
