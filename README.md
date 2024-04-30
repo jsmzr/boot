@@ -98,7 +98,7 @@ func Hello(c *gin.Context) {
 - [ ] mertrics
     - [x] prometheus
 - [ ] database
-    - [ ] mysql
+    - [x] mysql
     - [ ] oracle
 - [ ] cache
-    - [ ] redis
+    - [x] redis
