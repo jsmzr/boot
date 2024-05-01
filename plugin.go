@@ -22,7 +22,7 @@ func RegisterPlugin(name string, plugin Plugin) {
 	plugins[name] = plugin
 }
 
-func PostProccess() error {
+func PostProcess() error {
 	if err := initConfig(); err != nil {
 		return err
 	}

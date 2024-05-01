@@ -71,7 +71,7 @@ func Run() error {
 	// init base config
 	boot.InitDefaultConfig(configPrefix, defaultConfig)
 	// init plugin
-	if err := boot.PostProccess(); err != nil {
+	if err := boot.PostProcess(); err != nil {
 		return err
 	}
 	gin.SetMode(viper.GetString(configPrefix + "mode"))
