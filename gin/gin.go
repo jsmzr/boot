@@ -52,6 +52,10 @@ func initMiddleware(e *gin.Engine) error {
 	}
 	values := make([]GinMiddleware, 0, len(middlewares))
 	for _, v := range middlewares {
+		if !v.Enabled() {
+			log(fmt.Sprintf("[%T] middleware disable", v))
+			continue
+		}
 		values = append(values, v)
 	}
 	sort.Slice(values, func(i, j int) bool {
