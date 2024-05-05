@@ -52,6 +52,10 @@ func initMiddleware(e *gin.Engine) error {
 	}
 	values := make([]GinMiddleware, 0, len(middlewares))
 	for _, v := range middlewares {
+		if !v.Enabled() {
+			log(fmt.Sprintf("[%T] middleware disable", v))
+			continue
+		}
 		values = append(values, v)
 	}
 	sort.Slice(values, func(i, j int) bool {
@@ -71,7 +75,7 @@ func Run() error {
 	// init base config
 	boot.InitDefaultConfig(configPrefix, defaultConfig)
 	// init plugin
-	if err := boot.PostProccess(); err != nil {
+	if err := boot.PostProcess(); err != nil {
 		return err
 	}
 	gin.SetMode(viper.GetString(configPrefix + "mode"))

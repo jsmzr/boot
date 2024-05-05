@@ -49,6 +49,24 @@ func (p *TestFailedPlugin) Load() error {
 	return errors.New("test failed plugin")
 }
 
+type TestInitializer struct{}
+
+func (p *TestInitializer) Init() error {
+	return nil
+}
+
+type TestInitializer1 struct{}
+
+func (p *TestInitializer1) Init() error {
+	return nil
+}
+
+type TestFailedInitializer struct{}
+
+func (p *TestFailedInitializer) Init() error {
+	return errors.New("test failed initializer")
+}
+
 func TestRegisterPlugin(t *testing.T) {
 	plugins = make(map[string]Plugin)
 	name := "testPlugin"
@@ -67,28 +85,45 @@ func TestRegisterPluginFailed(t *testing.T) {
 
 }
 
-func TestPostProccessInitConfigFailed(t *testing.T) {
+func TestPostProcessInitConfigFailed(t *testing.T) {
 	viper.Set("boot.config.file", "bad_config_test.yaml")
-	if PostProccess() == nil {
+	if PostProcess() == nil {
 		t.Failed()
 	}
 }
 
-func TestPostProccessPluginFailed(t *testing.T) {
+func TestPostProcessPluginFailed(t *testing.T) {
 	viper.Set("boot.config.file", "application_test.yaml")
 	plugins = make(map[string]Plugin)
 	RegisterPlugin("test", &TestPlugin{})
 	RegisterPlugin("test1", &TestFailedPlugin{})
-	if PostProccess() == nil {
+	if PostProcess() == nil {
 		t.Fail()
 	}
 }
-func TestPostProccess(t *testing.T) {
+func TestPostProcess(t *testing.T) {
 	viper.Set("boot.config.file", "application_test.yaml")
 	plugins = make(map[string]Plugin)
 	RegisterPlugin("test", &TestPlugin{})
 	RegisterPlugin("test1", &TestUnavailable{})
-	if PostProccess() != nil {
+	if PostProcess() != nil {
+		t.Fail()
+	}
+}
+
+func TestPostProcessInitializer(t *testing.T) {
+	initializers = make(map[string]Initializer)
+	RegisterInitializer("test", &TestInitializer{})
+	RegisterInitializer("test1", &TestInitializer1{})
+	if PostProcess() != nil {
+		t.Fail()
+	}
+}
+
+func TestPostProcessInitializerFailed(t *testing.T) {
+	initializers = make(map[string]Initializer)
+	RegisterInitializer("test-failed", &TestFailedInitializer{})
+	if PostProcess() == nil {
 		t.Fail()
 	}
 }
