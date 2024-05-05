@@ -49,6 +49,24 @@ func (p *TestFailedPlugin) Load() error {
 	return errors.New("test failed plugin")
 }
 
+type TestInitializer struct{}
+
+func (p *TestInitializer) Init() error {
+	return nil
+}
+
+type TestInitializer1 struct{}
+
+func (p *TestInitializer1) Init() error {
+	return nil
+}
+
+type TestFailedInitializer struct{}
+
+func (p *TestFailedInitializer) Init() error {
+	return errors.New("test failed initializer")
+}
+
 func TestRegisterPlugin(t *testing.T) {
 	plugins = make(map[string]Plugin)
 	name := "testPlugin"
@@ -89,6 +107,23 @@ func TestPostProcess(t *testing.T) {
 	RegisterPlugin("test", &TestPlugin{})
 	RegisterPlugin("test1", &TestUnavailable{})
 	if PostProcess() != nil {
+		t.Fail()
+	}
+}
+
+func TestPostProcessInitializer(t *testing.T) {
+	initializers = make(map[string]Initializer)
+	RegisterInitializer("test", &TestInitializer{})
+	RegisterInitializer("test1", &TestInitializer1{})
+	if PostProcess() != nil {
+		t.Fail()
+	}
+}
+
+func TestPostProcessInitializerFailed(t *testing.T) {
+	initializers = make(map[string]Initializer)
+	RegisterInitializer("test-failed", &TestFailedInitializer{})
+	if PostProcess() == nil {
 		t.Fail()
 	}
 }

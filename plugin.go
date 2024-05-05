@@ -26,6 +26,9 @@ func PostProcess() error {
 	if err := initConfig(); err != nil {
 		return err
 	}
+	if err1 := runInitializer(); err1 != nil {
+		return err1
+	}
 	pluginList := make([]Plugin, 0, len(plugins))
 	for _, item := range plugins {
 		pluginList = append(pluginList, item)
