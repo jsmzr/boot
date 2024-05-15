@@ -141,7 +141,7 @@ func TestPostProcessTaskFailed(t *testing.T) {
 	initializers = make(map[string]Initializer)
 	tasks = make([]Task, 0)
 	RegisterTask("test", "", func() {})
-	if PostProcess() != nil {
+	if PostProcess() == nil {
 		t.Fail()
 	}
 }
