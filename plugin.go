@@ -46,5 +46,8 @@ func PostProcess() error {
 			return err
 		}
 	}
+	if err := runTask(); err != nil {
+		return err
+	}
 	return nil
 }

@@ -127,3 +127,21 @@ func TestPostProcessInitializerFailed(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestPostProcessTask(t *testing.T) {
+	initializers = make(map[string]Initializer)
+	tasks = make([]Task, 0)
+	RegisterTask("test", "0 0/1 * * * *", func() {})
+	if PostProcess() != nil {
+		t.Fail()
+	}
+}
+
+func TestPostProcessTaskFailed(t *testing.T) {
+	initializers = make(map[string]Initializer)
+	tasks = make([]Task, 0)
+	RegisterTask("test", "", func() {})
+	if PostProcess() != nil {
+		t.Fail()
+	}
+}
