@@ -4,18 +4,18 @@ import (
 	"fmt"
 
 	"github.com/robfig/cron/v3"
+	"github.com/spf13/viper"
 )
 
 type Task struct {
 	Name    string
-	Cron    string
 	Handler func()
 }
 
 var tasks = make([]Task, 0)
 
-func RegisterTask(name, cron string, handler func()) {
-	tasks = append(tasks, Task{Name: name, Cron: cron, Handler: handler})
+func RegisterTask(name string, handler func()) {
+	tasks = append(tasks, Task{Name: name, Handler: handler})
 }
 
 func runTask() error {
@@ -25,8 +25,9 @@ func runTask() error {
 	}
 	cron := cron.New(cron.WithSeconds())
 	for _, task := range tasks {
-		Log(fmt.Sprintf("Add task [%s]: [%s]", task.Cron, task.Name))
-		_, err := cron.AddFunc(task.Cron, task.Handler)
+		configCron := viper.GetString("task.cron." + task.Name)
+		Log(fmt.Sprintf("Add task [%s]: [%s]", configCron, task.Name))
+		_, err := cron.AddFunc(configCron, task.Handler)
 		if err != nil {
 			return err
 		}

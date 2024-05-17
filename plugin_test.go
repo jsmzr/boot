@@ -131,7 +131,8 @@ func TestPostProcessInitializerFailed(t *testing.T) {
 func TestPostProcessTask(t *testing.T) {
 	initializers = make(map[string]Initializer)
 	tasks = make([]Task, 0)
-	RegisterTask("test", "0 0/1 * * * *", func() {})
+	viper.Set("task.cron.test", "0 0/1 * * * *")
+	RegisterTask("test", func() {})
 	if PostProcess() != nil {
 		t.Fail()
 	}
@@ -140,7 +141,7 @@ func TestPostProcessTask(t *testing.T) {
 func TestPostProcessTaskFailed(t *testing.T) {
 	initializers = make(map[string]Initializer)
 	tasks = make([]Task, 0)
-	RegisterTask("test", "", func() {})
+	RegisterTask("testFailed", func() {})
 	if PostProcess() == nil {
 		t.Fail()
 	}
